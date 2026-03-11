@@ -53,6 +53,7 @@ namespace NetSpeedWidget
 
         private async void Form1_Load(object sender, EventArgs e)
         {
+            //elimino los logos de antel
             try
             {
                 await webView21.EnsureCoreWebView2Async(null);
@@ -87,8 +88,12 @@ namespace NetSpeedWidget
                 MessageBox.Show("Error WebView2: " + ex.Message);
             }
 
+
+            //posisiono el form abajo a la derecha
             PosicionarAbajoDerecha();
 
+
+            //ajusto el tamaño del control al del form
             try
             {
                 // Inicializa WebView2
