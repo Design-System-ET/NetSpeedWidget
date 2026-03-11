@@ -14,6 +14,7 @@
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             webView21 = new Microsoft.Web.WebView2.WinForms.WebView2();
             pictureBox1 = new PictureBox();
             panel1 = new Panel();
@@ -58,6 +59,7 @@
             Controls.Add(pictureBox1);
             Controls.Add(webView21);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Opacity = 0.8D;
             StartPosition = FormStartPosition.CenterScreen;
