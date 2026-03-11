@@ -15,7 +15,15 @@ namespace NetSpeedWidget
         public Form1()
         {
             InitializeComponent();
-            this.Resize += Form1_Resize; // Ajuste automático de tamaño
+
+            //no muestro icno en la barra de tareas
+            this.ShowInTaskbar = false;
+
+            //Siempre visinle
+            this.TopMost = true;
+
+            // Ajuste automático de tamaño
+            this.Resize += Form1_Resize;
 
             // Captura el mouse dentro de WebView2
             pictureBox1.MouseDown += Form1_MouseDown;
@@ -45,6 +53,39 @@ namespace NetSpeedWidget
 
         private async void Form1_Load(object sender, EventArgs e)
         {
+            try
+            {
+                await webView21.EnsureCoreWebView2Async(null);
+
+                // Script que se ejecuta antes de que la página cargue
+                string script = @"
+            function eliminarHostSelect(){
+                document.querySelectorAll('.host-select').forEach(e => e.remove());
+            }
+
+            // eliminar si aparece
+            const observer = new MutationObserver(() => {
+                eliminarHostSelect();
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                eliminarHostSelect();
+                observer.observe(document.documentElement, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        ";
+
+                await webView21.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(script);
+
+                webView21.ZoomFactor = 0.50;
+                webView21.Source = new Uri("http://antel.dualstack.speedtestcustom.com/");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error WebView2: " + ex.Message);
+            }
 
             PosicionarAbajoDerecha();
 
@@ -99,5 +140,10 @@ namespace NetSpeedWidget
 
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
